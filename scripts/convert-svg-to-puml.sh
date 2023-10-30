@@ -5,6 +5,10 @@ PREFIX="$1"
 FOLDER="$2"
 PUML_NAME="templates/${PREFIX}.puml"
 
+function urlencode() {
+  python3 -c "import urllib.parse; print(urllib.parse.quote(\"$1\"))"
+}
+
 cat << EOF > $PUML_NAME
 !\$ICON_SCALE ?= "3"
 !\$ELEMENT_FONT_COLOR ?= "black"
@@ -51,7 +55,8 @@ echo "|-----:|:---------|" >> $PREFIX.md
 for svg in $(find $FOLDER -name "*.svg" | sort )
 do
 
-  title="${PREFIX}_$(echo "$svg" | awk -F'/' '{print toupper($(NF-1)) "_" toupper($NF)}' | awk -F '.' '{print $1}' | tr ' -' '_')"
+  title=${svg/.svg}
+  title="${PREFIX}_$(echo "$title" | awk -F'/' '{category=toupper($(NF-1)); name=toupper($NF); if ( category == name ) { print name } else {print category "_" name }}' | tr ' -' '_')"
 
   if [[ "$1" == "AZURE" ]]
   then
@@ -60,8 +65,14 @@ do
     title=$(echo $title | tr -d '()')
   fi
 
-  echo -e "!\$${title} = \"img:data:image/svg+xml;base64,$(base64 -i "$svg"){scale=\" + \$ICON_SCALE + \"}\"\n" >> $PUML_NAME
+cat << EOF >> $PUML_NAME
+!function \$$title(\$scale="3.0")
+  !\$img = "img:data:image/svg+xml;base64,$(base64 -i "$svg")"
+  !return \$img + "{scale=" + \$scale + "}"
+!endfunction
 
-  echo -e "| ![\$$title]($svg) | \\\$$title |"
+EOF
+
+  echo -e "| ![\$${title}()]($(urlencode $svg)) | \\\$${title}() |"
 
 done | tee -a $PREFIX.md
