@@ -62,6 +62,6 @@ do
 
   echo -e "!\$${title} = \"img:data:image/svg+xml;base64,$(base64 -i "$svg"){scale=\" + \$ICON_SCALE + \"}\"\n" >> $PUML_NAME
 
-  echo -e "| ![\$$title]($svg) | \\\$$title |"
+  echo -e "| ![\$$title](\"$svg\") | \\\$$title |"
 
 done | tee -a $PREFIX.md
