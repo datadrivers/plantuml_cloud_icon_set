@@ -19,9 +19,9 @@ frame "Example" {
 
   Boundary(org, "Organization", $type="organization") {
     Boundary(billing, "Billing", $type="cloud management unit") {
-      System(gcp_billing_reporting, "Billing\nProject", "GCP Billing", $type="resource management unit", $sprite=$GCP_BILLING_BILLING)
-      System(gcp_billing_cf, "Cost Notification Cloud Function", "Cloud Function to exchange cost inforamtion", $type="GCP service", $sprite=$GCP_CLOUD_FUNCTIONS_CLOUD_FUNCTIONS)
-      System(azure_billing_reporting, "Billing\nProject", "Azure Billing", $type="resource management unit", $sprite=$AZURE_GENERAL_COST_MANAGEMENT_AND_BILLING)
+      System(gcp_billing_reporting, "Billing\nProject", "GCP Billing", $type="resource management unit", $sprite=$GCP_BILLING())
+      System(gcp_billing_cf, "Cost Notification Cloud Function", "Cloud Function to exchange cost inforamtion", $type="GCP service", $sprite=$GCP_CLOUD_FUNCTIONS())
+      System(azure_billing_reporting, "Billing\nProject", "Azure Billing", $type="resource management unit", $sprite=$AZURE_GENERAL_COST_MANAGEMENT_AND_BILLING())
     }
 
     BiRel_R(azure_billing_reporting, gcp_billing_cf, "Data Exchange")
