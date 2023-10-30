@@ -45,6 +45,9 @@ EOF
 
 IFS=$'\n'
 
+echo "| Icon | Variable |" > $PREFIX.md
+echo "|-----:|:---------|" >> $PREFIX.md
+
 for svg in $(find $FOLDER -name "*.svg" | sort )
 do
 
@@ -59,7 +62,6 @@ do
 
   echo -e "!\$${title} = \"img:data:image/svg+xml;base64,$(base64 -i "$svg"){scale=\" + \$ICON_SCALE + \"}\"\n" >> $PUML_NAME
 
-  echo -e "# \$$title\n"
-  echo -e "![\$$title]($svg)\n"
+  echo -e "| ![\$$title]($svg) | \\\$$title |"
 
-done | tee $PREFIX.md
+done | tee -a $PREFIX.md
