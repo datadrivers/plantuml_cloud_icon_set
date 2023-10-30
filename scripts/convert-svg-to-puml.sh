@@ -6,7 +6,7 @@ FOLDER="$2"
 PUML_NAME="templates/${PREFIX}.puml"
 
 function urlencode() {
-  curl -s -w '%{url}\n' -G / --data-urlencode "$1" | cut -c 3-
+  python3 -c "import urllib.parse; print(urllib.parse.quote(\"$1\"))"
 }
 
 cat << EOF > $PUML_NAME
