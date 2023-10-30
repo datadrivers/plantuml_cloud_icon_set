@@ -5,6 +5,10 @@ PREFIX="$1"
 FOLDER="$2"
 PUML_NAME="templates/${PREFIX}.puml"
 
+function urlencode() {
+  curl -s -w '%{url}\n' -G / --data-urlencode "$1" | cut -c 3-
+}
+
 cat << EOF > $PUML_NAME
 !\$ICON_SCALE ?= "3"
 !\$ELEMENT_FONT_COLOR ?= "black"
@@ -62,6 +66,6 @@ do
 
   echo -e "!\$${title} = \"img:data:image/svg+xml;base64,$(base64 -i "$svg"){scale=\" + \$ICON_SCALE + \"}\"\n" >> $PUML_NAME
 
-  echo -e "| ![\$$title](\"$svg\") | \\\$$title |"
+  echo -e "| ![\$$title]($(urlencode $svg)) | \\\$$title |"
 
 done | tee -a $PREFIX.md
